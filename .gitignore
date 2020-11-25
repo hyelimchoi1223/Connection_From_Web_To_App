@@ -1,2 +1,4 @@
-bin/
-obj/
+ReceiveSignal/bin/
+SendSignal/bin/
+ReceiveSignal/obj
+SendSignal/obj/
