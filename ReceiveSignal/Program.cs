@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 
-namespace ReceiveSignal
+namespace ReceiveSignal_Tcp
 {
     class Program
     {
@@ -21,15 +21,7 @@ namespace ReceiveSignal
                 byte[] outbuf = new byte[1024];
                 int nbytes = stream.Read(outbuf, 0, outbuf.Length);
                 string output = Encoding.ASCII.GetString(outbuf, 0, nbytes);
-                if (output == "stop")
-                {
-                    Console.WriteLine($"{nbytes} bytes: {output}");
-                    
-                }
-                else
-                {
-                    Console.WriteLine($"{nbytes} bytes: {output}");
-                }
+                Console.WriteLine($"{nbytes} bytes: {output}");
                 stream.Close();
                 tc.Close();
             }
