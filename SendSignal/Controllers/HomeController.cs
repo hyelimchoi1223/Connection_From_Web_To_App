@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using SendSignal.Connection;
+using SendSignal.Models;
 using System.Diagnostics;
-using System.Linq;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using SendSignal.Models;
 
 namespace SendSignal.Controllers
 {
@@ -35,29 +33,22 @@ namespace SendSignal.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-        public string Send()
+        public IActionResult TcpSend(string message)
         {
-            TcpClient tc = new TcpClient("127.0.0.1", 7000);
-            string msg = "send";
-            byte[] buff = Encoding.ASCII.GetBytes(msg);
-            NetworkStream stream = tc.GetStream();
-            stream.Write(buff, 0, buff.Length);
-            stream.Close();
-            tc.Close();
-
-            return "send";
+            Tcp tcp = new Tcp("127.0.0.1", 7000);
+            tcp.Send(message);
+            return RedirectToAction("Index");
         }
-        public string Stop()
+        public IActionResult SocketSend(string message)
         {
-            TcpClient tc = new TcpClient("127.0.0.1", 7000);
-            string msg = "stop";
-            byte[] buff = Encoding.ASCII.GetBytes(msg);
-            NetworkStream stream = tc.GetStream();
-            stream.Write(buff, 0, buff.Length);
-            stream.Close();
-            tc.Close();
+            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            EndPoint serverEP = new IPEndPoint(IPAddress.Loopback, 7000);
 
-            return "stop";
+            socket.Connect(serverEP);
+
+            byte[] buff = Encoding.ASCII.GetBytes(message);
+            socket.Send(buff);
+            return RedirectToAction("Index");
         }
     }
 }

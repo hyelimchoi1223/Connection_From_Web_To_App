@@ -3,6 +3,10 @@
 }
 
 <form asp-controller="Home">
-    <button type="submit" asp-action="Send">Send</button>
-    <button type="submit" asp-action="Stop">Stop</button>
+    <button type="submit" asp-action="TcpSend" asp-route-message="send">Send-Tcp</button>
+    <button type="submit" asp-action="TcpSend" asp-route-message="stop">Stop-Tcp</button>
+
+    <button type="submit" asp-action="SocketSend" asp-route-message="send">Send-Socket</button>
+    <button type="submit" asp-action="SocketSend" asp-route-message="stop">Stop-Socket</button>
 </form>
+
